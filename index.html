@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="child">
+        <h2>TIC TAC TOE</h2>
+        <div style="color: red"><h3 id="message"></h3></div>
+        <div class="game_board">
+          <div class="box" data-id="0"></div>
+          <div class="box" data-id="1"></div>
+          <div class="box" data-id="2"></div>
+          <div class="box" data-id="3"></div>
+          <div class="box" data-id="4"></div>
+          <div class="box" data-id="5"></div>
+          <div class="box" data-id="6"></div>
+          <div class="box" data-id="7"></div>
+          <div class="box" data-id="8"></div>
+        </div>
+        <button class="restartBTN" id="restartBTN">Restart</button>
+      </div>
+    </div>
+    <script>
+      let click = document.querySelectorAll('.box');
+      let running = true;
+      let player = 'X';
+      let currentPlayer = 'X';
+      let win_pattern = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      let options = ['', '', '', '', '', '', '', '', ''];
+
+      click.forEach((box) => {
+        box.addEventListener('click', () => {
+          const index = box.dataset.id;
+
+          player = changePlayer(player);
+
+          if (options[index] != '' || running == false) {
+            return;
+          }
+          updatebox(box, index);
+          checkwin();
+        });
+      });
+
+      function changePlayer(player) {
+        if (player == 'X') {
+          currentPlayer = 'O';
+          return 'O';
+        } else {
+          currentPlayer = 'X';
+          return 'X';
+        }
+      }
+      function updatebox(box, index) {
+        if (options[index] == '') {
+          options[index] = player;
+          box.innerHTML = currentPlayer;
+        }
+      }
+      function checkwin() {
+        for (let i = 0; i < win_pattern.length; i++) {
+          let winCon = win_pattern[i];
+          let box1 = options[winCon[0]];
+          let box2 = options[winCon[1]];
+          let box3 = options[winCon[2]];
+
+          if (box1 == '' || box2 == '' || box3 == '') {
+            continue;
+          }
+          if (box1 == box2 && box2 == box3) {
+            console.log('win' + currentPlayer);
+            running = false;
+
+            document.getElementById('message').innerHTML =
+              'Win Player: ' + currentPlayer;
+          }
+        }
+      }
+
+      let resetbtn = document.getElementById('restartBTN');
+
+      resetbtn.addEventListener('click', () => {
+        let running = true;
+        let player = 'X';
+        let currentPlayer = 'X';
+
+        options = ['', '', '', '', '', '', '', '', ''];
+
+        click.forEach((box) => {
+          box.innerHTML = '';
+        });
+      });
+    </script>
+  </body>
+</html>
